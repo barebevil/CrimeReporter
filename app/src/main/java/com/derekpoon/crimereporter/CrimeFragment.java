@@ -20,6 +20,8 @@ import android.widget.EditText;
 // extends Fragment
 //use v4 support library version
 
+    //this contains the details of the crime
+
 public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
