@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
  * Created by derekpoon on 12/01/2018.
  */
 
+//abstract class for hosting a fragment
+
 public abstract class SingleFragmentActivity extends FragmentActivity {
 
     protected abstract Fragment createFragment();
