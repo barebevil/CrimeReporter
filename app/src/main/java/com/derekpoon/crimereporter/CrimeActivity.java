@@ -18,6 +18,8 @@ public class CrimeActivity extends SingleFragmentActivity {
     private static final String EXTRA_CRIME_ID =
             "com.bignerdranch.android.criminalintent.crime_id";
 
+    //after creating an explicit intent, you call putExtra and pass in
+    //the string key and a value key
     public static Intent newIntent(Context packageContext, UUID crimeId) {
         Intent intent = new Intent(packageContext, CrimeActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
