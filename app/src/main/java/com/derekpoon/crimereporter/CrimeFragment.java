@@ -1,6 +1,8 @@
 package com.derekpoon.crimereporter;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -36,6 +39,8 @@ public class CrimeFragment extends Fragment {
     //string identifier that uniquely identifies the DialogFragment
     //in the FragmentManager's list
     private static final String DIALOG_DATE = "DialogDate";
+
+    private static final int REQUEST_DATE = 0;
 
     //when the hosting activity needs an instance of that fragment,
     //you have to call newInstance() method rather that calling
@@ -96,15 +101,17 @@ public class CrimeFragment extends Fragment {
 
         //date button widget
         mDateButton = (Button)v.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
+        updateDate();
 //        mDateButton.setEnabled(false);
         //if passing in a FragmentManager, a transaction will automatically be created
         //and committed for you
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = new DatePickerFragment();
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                //creates a new instance of the DatePickerFragment
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
             }
         });
@@ -123,4 +130,21 @@ public class CrimeFragment extends Fragment {
         return v;
     }
 
+    //retrieve the extra and set the date on the Crime and
+    //refresh the text of the date button
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return; }
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data
+                    .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            updateDate();
+        }
+    }
+
+    private void updateDate() {
+        mDateButton.setText(mCrime.getDate().toString());
+    }
 }
